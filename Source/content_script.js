@@ -1,4 +1,10 @@
-walk(document.body);
+var pricing_regex = /\b(\d+)\.(\d\d)\b/g;
+
+document.onreadystatechange = function() {
+	if (document.readyState != "loading") {
+		walk(document.body);
+	}
+}
 
 function walk(node) 
 {
@@ -30,13 +36,11 @@ function walk(node)
 function handleText(textNode) 
 {
 	var v = textNode.nodeValue;
-
-	v = v.replace(/\bThe Cloud\b/g, "My Butt");
-	v = v.replace(/\bThe cloud\b/g, "My butt");
-	v = v.replace(/\bthe Cloud\b/g, "my Butt");
-	v = v.replace(/\bthe cloud\b/g, "my butt");
-	
+	var match = pricing_regex.exec(v);
+	if (match != null) {
+		if (match[2] >= "95") {
+			v = "$"+(parseInt(match[1])+1).toString()+".00";
+		}
+	}
 	textNode.nodeValue = v;
 }
-
-
